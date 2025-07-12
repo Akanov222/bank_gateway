@@ -1,0 +1,88 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-initial-schema
+      author: your_name
+      changes:
+        - createTable:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  type: UUID DEFAULT gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tax_number
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: UUID DEFAULT gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: DECIMAL(19,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: VARCHAR(3)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sender_iban
+                  type: VARCHAR(34) #max length for IBAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: receiver_iban
+                  type: VARCHAR(34)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_payment_client
+                    references: clients(id)
+
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            baseColumnNames: client_id
+            referencedTableName: clients
+            referencedColumnNames: id
+            constraintName: fk_payment_client
+
+        - addUniqueConstraint:
+            tableName: clients
+            columnNames: tax_number
+            constraintName: uk_clients_tax_number  # Явное задание имени constraint
+
+        - createIndex:
+            tableName: clients
+            indexName: idx_clients_tax_number
+            columns:
+              - column:
+                  name: tax_number
+                  type: VARCHAR(20) # Создаем индекс для ускорения поиска по taxNumber:

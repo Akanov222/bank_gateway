@@ -1,6 +1,6 @@
-package banking_gateway.repository;
+package com.bank.gateway.repository;
 
-import banking_gateway.model.Payment;
+import com.bank.gateway.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

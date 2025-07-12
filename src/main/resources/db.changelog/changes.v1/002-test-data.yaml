@@ -1,0 +1,98 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-test-data
+      author: your_name
+      changes:
+        # Тестовые клиенты
+        - insert:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
+                  name: name
+                  value: "ООО 'Ромашка'"
+              - column:
+                  name: tax_number
+                  value: "123456789012"
+
+        - insert:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
+                  name: name
+                  value: "ИП Иванов Иван Иванович"
+              - column:
+                  name: tax_number
+                  value: "987654321098"
+
+        # Тестовые платежи (используем подзапрос для получения client_id)
+        - insert:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
+                  name: amount
+                  value: "10000.50"
+              - column:
+                  name: currency
+                  value: "RUB"
+              - column:
+                  name: sender_iban
+                  value: "RU02000000000000000001"
+              - column:
+                  name: receiver_iban
+                  value: "RU03000000000000000002"
+              - column:
+                  name: client_id
+                  valueComputed: (SELECT id FROM clients WHERE tax_number = '123456789012')
+
+        - insert:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
+                  name: amount
+                  value: "500.75"
+              - column:
+                  name: currency
+                  value: "USD"
+              - column:
+                  name: sender_iban
+                  value: "RU03000000000000000002"
+              - column:
+                  name: receiver_iban
+                  value: "US03000000000000000003"
+              - column:
+                  name: client_id
+                  valueComputed: (SELECT id FROM clients WHERE tax_number = '987654321098')
+
+        - insert:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  valueComputed: gen_random_uuid()
+              - column:
+                  name: amount
+                  value: "1200.00"
+              - column:
+                  name: currency
+                  value: "EUR"
+              - column:
+                  name: sender_iban
+                  value: "RU02000000000000000001"
+              - column:
+                  name: receiver_iban
+                  value: "DE89370400440532013000"
+              - column:
+                  name: client_id
+                  valueComputed: (SELECT id FROM clients WHERE tax_number = '123456789012')

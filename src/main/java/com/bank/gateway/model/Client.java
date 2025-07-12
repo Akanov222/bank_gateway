@@ -1,4 +1,4 @@
-package banking_gateway.model;
+package com.bank.gateway.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
