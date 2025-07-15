@@ -27,7 +27,7 @@
 - Склонируйте репозиторий с проектом на ваш компьютер:
 git clone https://github.com/Akanov222/bank_gateway
 3. Сборка и запуск
-- Перейдите в директорию проекта: cd personal-finance-manager
+- Перейдите в директорию проекта: cd bank_gateway
 - Соберите проект с помощью Maven: mvn clean install
 - Запустите приложение: java -jar target/bank_gateway.jar
 4. Использование приложения

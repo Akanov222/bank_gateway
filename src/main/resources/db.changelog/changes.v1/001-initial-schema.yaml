@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: UUID DEFAULT gen_random_uuid()
+                  type: varchar(255) DEFAULT gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -29,7 +29,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: UUID DEFAULT gen_random_uuid()
+                  type: varchar(255) DEFAULT gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -61,7 +61,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: client_id
-                  type: UUID
+                  type: varchar(255)
                   constraints:
                     nullable: true
                     foreignKeyName: fk_payment_client
