@@ -11,9 +11,9 @@ public class ClientService {
     private final ClientRepository clientRepository;
 
     public Client createClient(Client client) {
-        if(clientRepository.existByTaxNumber(client.getTaxNumber())) {
-            throw new IllegalStateException("Клиент с таким ИНН уже существует");
-        }
+//        if(clientRepository.existByTaxNumber(client.getTaxNumber())) {
+//            throw new IllegalStateException("Клиент с таким ИНН уже существует");
+//        }
         return clientRepository.save(client);
     }
 }

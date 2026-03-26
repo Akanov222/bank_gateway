@@ -48,29 +48,35 @@ git clone https://github.com/Akanov222/bank_gateway
 -----------------------------------------------------------------------
 # Структура проекта
 ```
-bank_gateway/  
+bank-gateway/  
+├── .github/  
+│   └── workflows/  
+│       └── ci-cd.yml                  # GitHub Actions (сборка, тесты, деплой)  
 ├── src/  
 │   ├── main/  
 │   │   ├── java/com/bank/gateway/  
-│   │   │   ├── config/                # Конфигурации (Camel, Spring, Kafka)  
-│   │   │   ├── routes/                # Маршруты Apache Camel  
-│   │   │   ├── dto/                   # DTO (вход/выход API)  
-│   │   │   ├── model/                 # Сущности БД (JPA)  
-│   │   │   ├── repository/            # Spring Data JPA репозитории  
-│   │   │   ├── service/               # Бизнес-логика (подпись, валидация)  
-│   │   │   ├── security/              # JWT + Spring Security  
+│   │   │   ├── config/                # Конфигурации  
+│   │   │   │   ├── CamelConfig.java   # Настройки Apache Camel  
+│   │   │   │   ├── KafkaConfig.java   # Настройки Kafka  
+│   │   │   │   └── OpenApiConfig.java # Swagger  
+│   │   │   ├── routes/                # Маршруты Camel  
+│   │   │   │   └── PaymentRoute.java  # Обработка платежей через Kafka + БД  
+│   │   │   ├── dto/                   # DTO  
+│   │   │   ├── model/                 # JPA-сущности  
+│   │   │   ├── repository/            # Spring Data JPA  
+│   │   │   ├── service/               # Сервисы  
 │   │   │   ├── exception/             # Кастомные исключения  
+│   │   │   ├── aop/                   # Логирование (AOP)  
 │   │   │   └── Application.java       # Точка входа  
 │   │   ├── resources/  
 │   │   │   ├── db/                    # Liquibase-миграции  
-│   │   │   ├── xslt/                  # XSLT-шаблоны  
-│   │   │   ├── application.yml        # Основные настройки  
-│   │   │   └── logback-spring.xml     # Логирование  
-│   ├── test/                          # Тесты (JUnit, Mockito)  
+│   │   │   ├── logback-spring.xml     # Настройки логирования  
+│   │   │   └── application.properties # Настройки Spring + Kafka  
+│   ├── test/                          # Интеграционные и unit-тесты  
 ├── docker/                            # Dockerfile + compose  
 ├── k8s/                               # Манифесты Kubernetes  
 ├── README.md  
-└── pom.xml
+└── pom.xml                            # Зависимости (Spring Boot, Camel, Kafka, MapStruct, etc.)
 ```
 -----------------------------------------------------------------------
 # Лицензия

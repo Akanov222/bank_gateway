@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B clean verify
+        env:
+          MAVEN_OPTS: -Dmaven.repo.local=.m2/repository
+
+      - name: SonarQube Scan (опционально)
+        if: github.ref == 'refs/heads/main'
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  docker-push:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Только для main ветки
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.repository_url }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+#TODO: добавить:
+#  - name: Security Scan (Trivy)
+#    uses: aquasecurity/trivy-action@master
+#    with:
+#      image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
+#      format: 'table'
+
