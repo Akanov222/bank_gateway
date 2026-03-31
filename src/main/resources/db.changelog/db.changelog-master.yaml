@@ -1,4 +1,5 @@
 databaseChangeLog:
-  - includeAll:
-      path: db/changelog/changes/v1
-      relativeToChangelogFile: true
+  - include:
+      file: db/changelog/changes/v1/001-initial-schema.yaml
+  - include:
+        file: 002-test-data.yaml

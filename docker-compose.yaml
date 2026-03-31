@@ -27,33 +27,5 @@ services:
       timeout: 5s
       retries: 5
 
-  liquibase:
-    image: liquibase/liquibase
-    container_name: bank_gateway_liquibase
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ./src/main/resources/db/changelog:/liquibase/changelog
-    command: --url=jdbc:postgresql://postgres:5432/bank_gateway --username=postgres --password=postgres --changeLogFile=classpath:/db/changelog/db.changelog-master.yaml update
-    environment:
-      - LIQUIBASE_HUB_MODE=off
-
-  kafka:
-    image: bitnami/kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
-    depends_on:
-      - zookeeper
-
-  zookeeper:
-    image: bitnami/zookeeper
-    ports:
-      - "2181:2181"
-
 volumes:
   postgres_data:
